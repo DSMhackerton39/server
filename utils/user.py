@@ -12,6 +12,7 @@ def create_user(session: Session, body: SignUp):
         TblUser(
             u_id=body.id,
             password=get_password_hash(body.password),
+            name=body.name
         )
     )
 

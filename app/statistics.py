@@ -16,6 +16,6 @@ async def get_statistics(user: str = Depends(get_current_user)):
 
 
 @app.post("/only-Ai/{is_sleep}")
-async def save_statistics(is_sleep: int, user: str = Depends(get_current_user)):
+async def save_statistics(is_sleep: int):
     with session_scope() as session:
-        return await save_statistic(user_id=user, is_sleep=is_sleep, session=session)
+        return await save_statistic(is_sleep=is_sleep, session=session)

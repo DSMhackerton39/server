@@ -24,7 +24,11 @@ def get_statistic(user_id: str, session: Session):
     }
 
 
-def save_statistic(user_id: str, session: Session):
+@sio_server.event
+async def save_statistic(user_id: str, is_sleep: int, session: Session):
+    if not is_sleep:
+        await sio_server.emit('wake_up', {"message": "wake up"})
+        return
     statistic = session.query(TblStatistic).filter(TblStatistic.user_id == user_id).first()
 
     if statistic:
@@ -38,3 +42,6 @@ def save_statistic(user_id: str, session: Session):
                 user_id=user_id
             )
         )
+    await sio_server.emit('sleep', {"message": "user sleep"})
+
+    return

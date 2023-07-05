@@ -15,9 +15,7 @@ async def get_statistics(user: str = Depends(get_current_user)):
         return get_statistic(user_id=user, session=session)
 
 
-@sio_server.event
-@app.post("/only-Ai")
-async def save_statistics(user: str = Depends(get_current_user)):
+@app.post("/only-Ai/{is_sleep}")
+async def save_statistics(is_sleep: int, user: str = Depends(get_current_user)):
     with session_scope() as session:
-        await sio_server.emit('sleep', {"message": "user sleep"})
-        return save_statistic(user_id=user, session=session)
+        return await save_statistic(user_id=user, is_sleep=is_sleep, session=session)

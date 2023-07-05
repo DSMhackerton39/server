@@ -25,7 +25,7 @@ def get_statistic(user_id: str, session: Session):
 
 
 @sio_server.event
-async def save_statistic(user_id: str, is_sleep: int, session: Session):
+async def save_statistic(is_sleep: int, session: Session):
     if not is_sleep:
         await sio_server.emit('wake_up', {"message": "wake up"})
         return

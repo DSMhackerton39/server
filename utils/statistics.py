@@ -5,16 +5,16 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
 from core.model.models import TblUser, TblStatistic
+from utils.sockets import sio_server
 
 
 def get_statistic(user_id: str, session: Session):
-
     statistics = session.query(TblStatistic.user_id,
                                TblStatistic.date,
                                TblStatistic.count,
                                TblUser.id
                                ).filter(TblStatistic.user_id == user_id).join(TblStatistic,
-                                                                           TblStatistic.user_id == TblUser.id)
+                                                                              TblStatistic.user_id == TblUser.id)
 
     return {
         "statistic": [{
@@ -24,17 +24,17 @@ def get_statistic(user_id: str, session: Session):
     }
 
 
-def save_statistic(u_id: str, session: Session):
-    statistic = session.query(TblStatistic).filter(TblStatistic.user_id == u_id).first()
+def save_statistic(user_id: str, session: Session):
+    statistic = session.query(TblStatistic).filter(TblStatistic.user_id == user_id).first()
+
     if statistic:
         statistic.count = statistic.count + 1
-        return
 
-    session.add(
-        TblStatistic(
-            date=date.today(),
-            count=1,
-            user_id=u_id
+    else:
+        session.add(
+            TblStatistic(
+                date=date.today(),
+                count=1,
+                user_id=user_id
+            )
         )
-    )
-    return

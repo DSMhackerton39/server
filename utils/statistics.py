@@ -30,7 +30,7 @@ async def save_statistic(is_sleep: int, session: Session):
         await sio_server.emit('wake_up', {"message": "wake up"})
         return
     statistic = session.query(TblStatistic).filter(
-        TblStatistic.user_id == 8 and TblStatistic.date == date.today()).first()
+        TblStatistic.user_id == 8, TblStatistic.date == date.today()).first()
 
     if statistic:
         statistic.count = statistic.count + 1
